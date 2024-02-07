@@ -1,0 +1,22 @@
+.ORGA 0x9405C
+J 0x80403D2C
+NOP
+
+.ORGA 0x1203D2C
+LW R10, 0x0034(R29)
+LUI R9, 0x0000 ;First two bytes of text box RGB value
+ORI R9, R9, 0x00FF ;Last byte and alpha channel
+J 0x802D9064
+NOP
+
+.ORGA 0x94360
+J 0x80403D40
+NOP
+
+.ORGA 0x1203D40
+SW R25, 0x0000(R8)
+LW R10, 0x0004(R29)
+LUI R9, 0xFF50 ;First two bytes of text RGB value
+ORI R9, 0xFFFF ;Last byte and alpha channel
+J 0x802D936C
+NOP

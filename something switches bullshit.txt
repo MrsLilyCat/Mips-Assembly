@@ -1,0 +1,5 @@
+.orga 0x6C404 ;;;time for it to start ticking faster
+SLTI AT, T0, 0x0168
+
+.orga 0x6C44C ;;;time for it to become unpressed
+SLTI AT, T3, 0x0191

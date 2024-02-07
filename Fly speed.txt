@@ -1,0 +1,47 @@
+.orga 0x21ACAC ;replaces peach at end behav (0x13000EAC)
+.dw 0x00060000
+.dw 0x11014001
+.dw 0x08000000
+.dd 0x0C0000008040F71C ;replace this by actual address when I can see the rom
+.dw 0x09000000
+
+.orga 0x120F71C ;replace this by actual address when I can see the rom
+ADDIU SP, SP, 0xFFE8
+SW RA, 0x14(SP)
+LA T0, 0x8033B170 ;mario struct
+LW T1, 0xC(T0) ;action variable
+
+LA T2, 0x10880899 ;flying action ID
+BNE T1, T2, Iwer
+NOP
+
+LA T2, 0x8033AFA2
+LB T1, 0(T2)
+ANDI T1, T1, 0b10000000 ;checks if A has just been pressed
+BEQZ T1, Iwer
+NOP
+
+LB T1, 0xAE(T0) ;HP higher byte
+ADDIU T1, T1, -1 ;removes 1HP
+SB T1, 0xAE(T0)
+
+LW T1, 0x54(T0) ;mario h speed
+MTC1 T1, F4
+NOP
+ADDIU T2, R0, 50 ;all this stuff adds 50 to mario speed
+MTC1 T2, F6
+NOP
+CVT.S.W F8, F6
+ADD.S F10, F4, F8
+SWC1 F10, 0x54(T0) ;mario h speed here too
+
+LB T1, 0xAE(T0)
+BNEZ T1, Iwer
+NOP
+LA T1, 0x0188088A ;makes mario bonk when hp is 0 so that you can't spam A to overflow the HP counter
+SW T1, 0xC(T0)
+
+Iwer:
+LW RA, 0x14(SP)
+JR RA
+ADDIU SP, SP, 0x18

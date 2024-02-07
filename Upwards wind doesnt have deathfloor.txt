@@ -1,0 +1,5 @@
+.orga 0xB894
+NOP		;;;Loads in Deathfloor;;;
+
+.orga 0x11AB0
+LUI AT, 0x4348  ;;;upwards velocity;;;

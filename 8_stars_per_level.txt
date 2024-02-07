@@ -1,0 +1,66 @@
+351F4: 331900FF
+3521C: 314B00FF
+2270FC: 24010007
+227160: 24010007
+2272E0: 24010007
+226F44: 31CF0080
+34FDC: 29610008
+226F98: AD22001C
+226FAC: 8D4B001C
+226FBC: 8DAE001C
+8BCC: 24040007
+227A98: 31CF0080
+975C0: 31F80080
+97694: 24010007
+	
+
+
+0x8024BE14 builds star select menu (Called by Level Script command 0x11)
+0x80177560 Chooses Star Selector Stars (Called by Level Script command 0x11)
+0x80176B20 Spawns Star Selector Stars
+0x80176A74 Spawns 100 coin star in Star Select Screen
+0x80176A98 X-Position for 100 coin star in Star Select Screen
+0x80176A9C Y-Position for 100 coin star in Star Select Screen
+0x80176AA0 Z-Position for 100 coin star in Star Select Screen
+0x80176A08 Star Rotation Speed in Star Select Screen
+0x80176A24 100 coin star Rotation Speed in Star Select Screen
+
+351F4/8027A1F4 whatever
+	change to 331900FF
+3521C/8027A21C ANDI T3, T2, 0x007F //Makes cannon bit not count as star
+	change to 314B00FF
+2270FC/80176C3C, 227160/80176CA0, 2272E0/80176E20 ADDIU AT, R0, 0x0006 //Special case if 7 stars collected in star select screen
+	change to 24010007
+226F44/80176A84 ANDI T7, T6, 0x0040 //Determines if 100 coin star has been collected
+	change to 31CF0080
+	
+34FDC/80279fdc STLI AT, T3, 0x0007 //Counts only 7 stars per level
+	change to 29610008
+	
+226F98/80176AD8 SW V0, 0x0018 (T1)
+	change to AD22001C
+226FAC/80176AEC SW T3, 0x0018 (T2)
+	change to 8D4B001C
+226FBC/80176AFC LW T6, 0x0018 (T5)
+	change to 8DAE001C
+	
+8BCC/8024DBCC ADDIU A0, R0, 0x0006 // Gives 100 coin stars ID 6
+	change to 24040007
+	
+227A98/801775D8 ANDI T7, T6, 0x0040 // If 100 coin star is collected, one less normal star will be displayed
+	change to 31CF0080
+		
+975C0/802DC5C0 ANDI T8, T7, 0x0040 //AND with 100 coin bit star in pause menu
+	change to 31F80080
+	
+97694/802DC694 ADDIU AT, R0, 0x0007 //Checks for 6 stars special case in pause menu
+	change to 24010007
+	
+JAL 0x8027A1C8 Load Level Stars (A0 - File Number, A1 - Level ID)
+JAL 0x8027A23C Save Level Stars (A0 - File Number, A1 - Level ID, A2 - Byte to save)
+34C44: JAL 0x80279C44 Collect Star (A0 - File Number, A1 - Star ID)
+
+8AD6C: SRA, T6, T5, 0x18 //first byte of bparam as signed byte
+		ANDI T7, T6, 0x001F //Makes highest accepted Star ID 31. Why the hell did Nintendo do that?
+	change to 00 0D 76 02 31 CF 00 FF
+	

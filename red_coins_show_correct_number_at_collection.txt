@@ -1,0 +1,197 @@
+.orga 0xADD70//802f2d70
+sw t0, 0xf4 (T8) // stores total number of reds in f4
+sw t0, 0x1b0 (T8) //original number of reds
+
+.orga 0xA0CB8 //802e5cb8
+
+lbu a0, 0x33 (SP) //red coins over 7f cause issue if not for this
+
+.orga 0xADf80//802f2f80
+addu at, r0, r0 //makes final coin not show number
+
+.orga 0xA0C94//802e5c94
+nop //every coin spawns a number
+
+//8029ef64
+//a0 = red coin number
+
+//13004348 orange num behavior
+
+
+.orga 0x21e15c
+.word 0x802f6d0c //changes orange # behav to have more space
+
+.orga 0xB1CFC//802f6cfc
+
+lw ra, 0x1c (SP)
+lw s0, 0x18 (SP)
+jr ra
+addiu sp, sp, 0x28
+//end of previous behav
+
+
+
+
+//start of orange number init behav
+//802f6d0c
+addiu sp, sp, 0xffe8
+sw ra, 0x14 (SP)
+lui a0, 0x1300
+jal 0x8029F95C //find obj in ram
+ori a0, a0, 0x3e8c //normal reds
+sw v0, 0x18 (SP)
+lui a0, 0x1300
+jal 0x8029f95c
+ori a0, a0, 0x3ee4 //bowser reds
+lw v1, 0x18 (SP)
+jal 0x802f7920
+or v0, v1, v0
+lui a0, 0x8036
+lw a0, 0x1160 (A0)
+lw t7, 0x144 (A0) //red coin number
+sw t7, 0xf0 (A0)
+
+lw ra, 0x14 (SP)
+jr ra
+addiu sp, sp, 0x18
+
+
+.orga 0xB2920 //802f7920
+addiu sp, sp, 0xffe8
+sw ra, 0x14 (SP)
+beq v0, r0, dupe
+lui a0, 0x8036
+lw a0, 0x1160 (A0)
+lui at, 0x41a0
+lwc1 f2, 0xa4 (A0)
+mtc1 at, f4
+add.s f4, f2, f4
+swc1 f4, 0xa4 (A0)
+lw t7, 0x144 (A0) //red coin number
+lw t1, 0x1b0 (V0) //original number of reds
+subu t7, t1, t7
+//t7 = number to be displayed
+
+
+ori t4, r0, 0xa
+divu t7, t4
+mflo t6 //tens place
+mfhi t5 //ones place
+subu t3, t1, t6
+//t3 = number to be displayed on the spawned red, with inverse operation done to offset above
+
+beq t6, r0, DUPE //if less than 9 act as normal
+sw t7, 0x144 (A0)
+
+sw t5, 0x144 (A0) //the first number is the leftmost place
+sw t3, 0x18 (SP)
+
+//spawn thing, give it t5 as number, repeats thing function
+ori a1, r0, 0xdb //orange number model
+lui a2, 0x1300
+jal 0x8029EDCC//a0=this obj, a1=model, a2=behav
+ori a2, a2, 0x15e4 //v0 = returned pointer
+lw t6, 0x18 (SP)
+sw t6, 0x144 (V0) //store ones place in other number
+
+//need to call function to do perspective correction??
+lui at, 0x4200
+mtc1 at, f4
+lwc1 f2, 0xa4 (V0)
+add.s f4, f2, f4
+swc1 f4, 0xa4 (V0) //y pos
+
+dupe:
+lw ra, 0x14 (SP)
+jr ra
+addiu sp, sp, 0x18
+
+//set orange number here as a seperate behavior
+.orga 0x6D400 //802b2400
+addiu sp, sp, 0xffd0
+sw ra, 0x24 (SP)
+sw a0, 0x30 (SP)
+sw a1, 0x34 (SP)
+sw a2, 0x38 (SP)
+sw a3, 0x3c (SP)
+lui t7, 0x8036
+lw t7, 0x1160 (T7)
+lui t9, 0x1300
+j 0x802e5cac
+addiu t9, t9, 0x15e4
+
+//call above code for red coins
+.orga 0xadfac //802f2fac
+jal 0x802b2400
+
+
+
+//og orange number asm
+.orga 0x6d3e0 //802b23e0
+lui t6, 0x8036
+lw t6, 0x1160 (T6)
+lw t7, 0x144 (T6)
+sw t7, 0xf0 (T6)
+lui at, 0x41d0
+mtc1 at, f4
+jr ra
+swc1 f4, 0xb0 (T6)
+
+
+//relocated behavior
+.orga 0x21b3e4
+.word 0x00060000 ,0x0c000000, 0x802f6d0c, 0x0d0a0015, 0x04000000, 0x13004354
+//altered og behavior
+.orga 0x21e148
+.word 0x00060000,0x0c000000,0x802b23e0,0x11010001,0x21000000,0x2d000000,0x08000000,0x0c000000,0x802f6d58,0x09000000
+
+
+
+
+
+
+
+.orga 0xADDdc//802f2ddc
+addu at, r0, r0 //sets star spawn at 0 instead of 8
+
+.orga 0xADF70//802f2f70
+addiu t4, t3, 0xffff //makes each red coin coint down instead of increment
+
+
+.orga 0xAE2DC //802f32dc
+or at, r0, r0 //changes spawn condition for bowser reds
+
+
+//appends behav
+
+.orga 0x21dcec
+
+.word 0x04000000
+
+.orga 0x21dcf0
+
+.word 0x13004400 
+
+.orga 0x21e200
+
+.word 0x0C000000
+
+.orga 0x21e204
+
+.word 0x802F2C84 //gives bowser reds same condition as normal red star
+
+.orga 0x21e208
+
+.word 0x08000000
+
+.orga 0x21e20c
+
+.word 0x0C000000
+
+.orga 0x21e210
+
+.word 0x802F328C 
+
+.orga 0x21e214
+
+.word 0x09000000

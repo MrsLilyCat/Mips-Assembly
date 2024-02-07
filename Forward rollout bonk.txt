@@ -1,0 +1,33 @@
+.orga 0x28C7C	;;;Forward rollout collid with wall location;;;
+J 0x80404878
+NOP
+NOP
+
+.orga 0x1204878
+LW A0, 0x0028(SP)
+JAL 0x802552FC
+ADDIU A1, R0, 0x0001
+LW T6, 0x0028(SP)
+SH R0, 0x002C(T6)
+LW T7, 0x0028(SP)
+MTC1 R0, F10
+LWC1 F8, 0x004C(T7)
+C.LT.S F10, F8
+NOP
+BC1F Branch
+NOP
+MTC1 R0, F16
+LW T5, 0x0028(SP)
+SWC1 F16, 0x004C(T5)
+Branch:
+LW T9, 0x0028(SP)
+LW T0, 0x0008(T9)
+ORI T1, T0, 0x0002
+SW T1, 0x0008(T9)
+LUI A1, 0x0102
+ORI A1, A1, 0x08B0
+LW A0, 0x0028(SP)
+JAL 0x80253178
+OR A2, R0, R0
+J 0x8026DC84			;;;jump back to 3 lines from original;;;
+NOP

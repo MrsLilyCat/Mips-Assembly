@@ -1,0 +1,16 @@
+.orga 0x861C0 ; Set ROM address
+addiu sp, sp, -0x18
+sw ra, 0x14 (sp)
+
+LUI AT, 0x8034
+LB T9, 0xB21E(AT)
+BEQ R0, T9, Nothing
+NOP
+
+ADDIU T9, R0, 1
+SB T9, 0xB21E(AT)
+
+Nothing:
+lw ra, 0x14 (sp)
+jr ra
+addiu sp, sp, 0x18

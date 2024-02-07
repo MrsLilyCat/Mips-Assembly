@@ -1,0 +1,11 @@
+.orga 0x6F9D0
+ADDIU T6, R0, 0x0007
+;;;;;This Code does things;;;;;
+
+.orga 0x6F9E4
+ADDIU T8, R0, 0x0007
+;;;;;this code also does things;;;;;
+
+.orga 0x6F9FC
+ADDIU T0, R0, 0x0007
+;;;;;i am 100 procent sure this code also does things;;;;;

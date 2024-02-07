@@ -1,0 +1,7 @@
+.orga 0x747E4
+NOP
+NOP
+
+.orga 0x7487C
+j 0x802B98C0
+NOP

@@ -1,0 +1,2 @@
+.orga 0x6A20C
+ADDIU AT, R0, 0x000A

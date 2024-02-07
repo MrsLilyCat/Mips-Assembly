@@ -1,0 +1,65 @@
+;;;;Behaviour crap;;
+.orga 0x21D6E8
+.dw 0x00090000
+.dw 0x11010048
+.dd 0x080000000C000000
+.dw 0x802ED62C
+.dd 0x0900000001010101
+.dd 0x0101010101010101
+.dw 0x01010101
+
+;;Behaviour loop crap;;
+.orga 0xA862C
+ADDIU SP, SP, -0x18
+SW RA, 0x0014(SP)
+LUI A0, 0x8036
+LUI A2, 0x1300
+ADDIU A2, A2, 0x2AF0
+LW A0, 0x1160(A0)
+JAL 0x8029EDCC	;;;Spawns object;;;
+OR A1, R0, R0
+LUI T6, 0x8036
+LW T6, 0x1160(T6)
+LUI AT, 0x437A
+MTC1 AT, F6
+LWC1 F4, 0x015C(T6)
+C.LT.S F4, F6
+NOP
+BC1F Branch1
+NOP
+LUI T7, 0x8034
+ADDIU T7, T7, 0xB170
+LW T8, 0x000C(T7)
+LUI AT, 0x0300	;;;Change this for different jump;;;
+ORI AT, AT, 0x0886	;;;this also needs to be changed;;;
+NOP
+NOP
+LUI T9, 0x8036
+LW T9, 0x1160(T9)
+LUI T1, 0x8034
+ADDIU T1, T1, 0xB170
+LW T0, 0x0144(T9)
+MTC1 T0, F8
+NOP
+CVT.S.W F10, F8
+SWC1 F10, 0x0054(T1)
+LUI T2, 0x8034
+ADDIU T2, T2, 0xB170
+LW T3, 0x000C(T2)
+LUI AT, 0x0300	;;;Change this for different jump;;;
+ORI AT, AT, 0x0886	;;;this also needs to be changed;;;
+NOP
+NOP
+LUI A0, 0x701E
+JAL 0x802CA1E0
+ORI A0, A0, 0xFF81
+
+Branch1:
+J 0x802ED77C
+NOP
+
+.orga 0xA877C
+LW RA, 0x0014(SP)
+ADDIU SP, SP, 0x18
+JR RA
+NOP

@@ -1,0 +1,74 @@
+//FC 12 7E 24 55 FF FB FD = darker
+//FC 12 7E 24 FF FE FB 7D = lighter
+//addc8c
+.org 0x21ce3c
+hex{04 00 00 00 13 00 00 68}
+.org 0x21b540
+hex{04 00 00 00 13 00 00 5c}
+.org 0x21dc58
+hex{04 00 00 00 13 00 00 54}
+.org 0x219e54
+hex{0c 00 00 00 80 2f 25 b0
+0c 00 00 00 80 2a 6b 7c
+09 00 00 00
+0C 00 00 00 80 17 68 E0
+0c 00 00 00 80 2a 6b 7c
+09 00 00 00}
+
+.org 0x61B7C
+
+
+addiu sp, sp, $ffe8
+sw ra, $0014 (SP)
+
+lui a0, $0302
+jal $80277f50
+ori a0, a0, $B888 //star env color
+sw v0, $0004 (SP)
+
+lui t4, $8036
+lw t4, $1160 (T4)
+lwc1 f12, $0204 (T4)
+swc1 f12, $0200 (T4)
+!sin:
+jal $80325480 //takes f12 returns f0
+nop
+lui t9, $42ff //127.5
+mtc1 t9, f2
+mul.s f4, f0, f2 //sin times 128
+add.s f4, f2, f4 //sin oscillating 0-255
+lw v0, $0004 (SP)
+cvt.w.s f4, f4
+mfc1 t8, f4
+andi t8, t8, $00ff
+sb t8, $0004 (V0)
+addiu v0, v0, $0001
+sw v0, $0004 (SP)
+lui t4, $8036
+lw t4, $1160 (T4)
+lw t6, $01b0 (T4)
+addiu t6, t6, $0001
+subiu t7, t6, $0003
+lwc1 f6, $0200 (T4)
+lui t2, $4000
+mtc1 t2, f2
+add.s f6, f2, f6
+swc1 f6, $0200 (T4)
+bgez t7, !end
+sw t6, $01b0 (T4)
+beq r0, r0, !sin
+lwc1 f12, $0200 (T4)
+
+!end:
+lui t4, $8036
+lw t4, $1160 (T4)
+lui t2, $3e80
+mtc1 t2, f4
+lwc1 f2, $0204 (T4)
+add.s f2, f4, f2
+swc1 f2, $0204 (T4)
+sw r0, $01b0 (T4)
+
+lw ra, $0014 (SP)
+jr ra
+addiu sp, sp, $0018

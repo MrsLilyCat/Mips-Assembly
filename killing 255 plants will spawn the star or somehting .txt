@@ -1,0 +1,2 @@
+.orga 0xC8010
+ADDIU AT, R0, 0x00FF
