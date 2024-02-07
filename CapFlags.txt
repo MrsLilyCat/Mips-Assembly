@@ -1,0 +1,15 @@
+
+.orga 0xA8498
+addiu sp, sp, -0x18
+sw ra, 0x0014(sp)
+jal 0x8027a0a8
+addiu a0, r0, 0x0002
+jal 0x8027a0a8
+addiu a0, r0, 0x0004
+jal 0x8027a0a8
+addiu a0, r0, 0x0008
+nop
+lw ra, 0x0014(sp)
+addiu sp, sp, 0x18
+nop
+jr ra
